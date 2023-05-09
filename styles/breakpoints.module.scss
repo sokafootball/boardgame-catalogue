@@ -1,0 +1,11 @@
+$breakpoint-sm: 576px !default;
+// TABLET
+$breakpoint-md: 768px !default;
+// DESKTOP
+$breakpoint-lg: 992px !default;
+
+$breakpoints: (
+  breakpoint-sm: $breakpoint-sm,
+  breakpoint-md: $breakpoint-md,
+  breakpoint-lg: $breakpoint-lg,
+);
