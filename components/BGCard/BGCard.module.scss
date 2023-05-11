@@ -1,0 +1,9 @@
+@import '../../styles/breakpoints.module.scss';
+.cardContainer {
+  background-position: center;
+  background-size: contain;
+}
+@media (min-width: $breakpoint-md) {
+}
+@media (min-width: $breakpoint-lg) {
+}
