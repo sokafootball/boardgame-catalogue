@@ -9,7 +9,7 @@ export interface IBGCardProps {
   description: string;
   thumbnailUrl: string;
   imageUrl: string;
-  price: number;
+  price: string;
   mechanicsIDs: mechanicID[];
   categoriesIDs: categoryID[];
   descriptionPreview?: string;

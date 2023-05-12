@@ -1,7 +1,13 @@
 @import '../../styles/breakpoints.module.scss';
-.cardContainer {
-  background-position: center;
-  background-size: contain;
+.card {
+  &_bar {
+    &_name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 200px;
+    }
+  }
 }
 @media (min-width: $breakpoint-md) {
 }
