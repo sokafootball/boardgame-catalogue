@@ -1,6 +1,12 @@
-import { Container, ImageList } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Container,
+  ImageList,
+  LinearProgress,
+} from '@mui/material';
 import BGCard from '../components/BGCard/BGCard';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { ScreenSizeContext } from '../providers/ScreenSizeProvider';
 import { IScreenSizeType } from '../hooks/UseScreenType';
 import { useLazyGetGamesQuery } from '../api/boardgamesAtlas';
@@ -17,7 +23,7 @@ const Home = () => {
     lt_max_playtime: '',
   };
   const [filters, setFilters] = useState<SearchBarFilters>(defaultFilters);
-  const [setGetGames, { data, isLoading, isError }, lastPromiseInfo] =
+  const [setGetGames, { data, isLoading, isError, isSuccess }] =
     useLazyGetGamesQuery();
   const screenSize: IScreenSizeType = useContext(
     ScreenSizeContext
@@ -48,41 +54,65 @@ const Home = () => {
 
   return (
     <>
-      <Container>
+      <Container maxWidth="md">
         <SearchBar
           filters={filters}
           handleFiltersChange={handleFiltersChange}
           handleConfirmSearch={handleConfirmSearch}
           handleClearFilters={handleClearFilters}
         />
-        {isLoading && <p>loading...</p>}
-        {data !== undefined && (
-          <ImageList
-            cols={screenSize.isMobile ? 1 : screenSize.isTablet ? 2 : 4}
-            sx={{ justifyItems: 'center' }}
-            gap={20}
-          >
-            {data.games.map((item, index) => (
-              <BGCard
-                key={`card_${index}`}
-                name={item.name}
-                minPlayers={item.min_players}
-                maxPlayers={item.max_players}
-                minPlaytime={item.min_playtime}
-                maxPlaytime={item.max_playtime}
-                minAge={item.min_age}
-                year={item.year_published}
-                description={item.description}
-                thumbnailUrl={item.thumb_url}
-                imageUrl={item.image_url}
-                price={item.price}
-                mechanicsIDs={item.mechanics}
-                categoriesIDs={item.categories}
-              />
-            ))}
-          </ImageList>
-        )}
       </Container>
+      <Box mt={10}>
+        <Container maxWidth="xl">
+          {isSuccess && data?.count === 0 && (
+            <Alert
+              variant="filled"
+              severity="info"
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              There were no results for your search.
+            </Alert>
+          )}
+          {isLoading && <LinearProgress />}
+          {isError && (
+            <Alert
+              variant="filled"
+              severity="error"
+              style={{ alignItems: 'center' }}
+            >
+              There was an error, please try again later.
+            </Alert>
+          )}
+          {data?.games.length > 0 && (
+            <ImageList
+              cols={screenSize.isMobile ? 1 : screenSize.isTablet ? 2 : 3}
+              sx={{ justifyItems: 'center', alignItems: 'center' }}
+              gap={20}
+            >
+              {data.games.map((item, index) => (
+                <BGCard
+                  key={`card_${index}`}
+                  name={item.name}
+                  minPlayers={item.min_players}
+                  maxPlayers={item.max_players}
+                  minPlaytime={item.min_playtime}
+                  maxPlaytime={item.max_playtime}
+                  minAge={item.min_age}
+                  year={item.year_published}
+                  description={item.description}
+                  thumbnailUrl={item.thumb_url}
+                  imageUrl={item.image_url}
+                  price={item.price}
+                  mechanicsIDs={item.mechanics}
+                  categoriesIDs={item.categories}
+                />
+              ))}
+            </ImageList>
+          )}
+        </Container>
+      </Box>
     </>
   );
 };

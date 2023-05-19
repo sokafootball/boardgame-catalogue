@@ -1,4 +1,1 @@
-- handle null values for statistics
-- set fixed image size in the ui
 - look for other image if not available
-- add Progress or Skeleton mui element for loading state

@@ -62,7 +62,7 @@ const SearchBar = ({
           flexDirection={screenSize.isMobile ? 'column' : 'row'}
           justifyContent={screenSize.isMobile ? 'center' : 'space-between'}
           alignItems={'center'}
-          gap={1}
+          gap={screenSize.isMobile ? 1 : 10}
         >
           <Box
             display={'flex'}
