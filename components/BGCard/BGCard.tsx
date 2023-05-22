@@ -1,4 +1,5 @@
 import { IBGCardProps } from './BGCard.models';
+import { useRouter } from 'next/router';
 import {
   Box,
   Divider,
@@ -11,16 +12,8 @@ import { ScreenSizeContext } from '../../providers/ScreenSizeProvider';
 import { IScreenSizeType } from '../../hooks/UseScreenType';
 import { useContext } from 'react';
 import { FamilyRestroom, AccessTime, Person } from '@mui/icons-material';
-const BGCard = ({
-  name,
-  minPlayers,
-  maxPlayers,
-  minPlaytime,
-  maxPlaytime,
-  minAge,
-  year,
-  imageUrl,
-}: IBGCardProps) => {
+const BGCard = ({ gameData }: IBGCardProps) => {
+  const router = useRouter();
   const screenSize: IScreenSizeType = useContext(
     ScreenSizeContext
   ) as IScreenSizeType;
@@ -29,13 +22,16 @@ const BGCard = ({
   return (
     <ImageListItem style={{ alignItems: 'center' }}>
       <img
-        src={imageUrl}
-        srcSet={imageUrl}
-        alt={name}
+        src={gameData.image_url}
+        srcSet={gameData.image_url}
+        alt={gameData.name}
         style={{
           maxWidth: 350,
           height: '400px',
           objectFit: 'contain',
+        }}
+        onClick={() => {
+          router.push(`${gameData.id}`);
         }}
       />
       <ImageListItemBar
@@ -47,10 +43,12 @@ const BGCard = ({
               style={{ maxWidth: '90vw' }}
               sx={{ margin: 'auto' }}
             >
-              {name}
+              {gameData.name}
             </Typography>
             <Typography align="center">
-              {year ? `(${year})` : notAvailableString}
+              {gameData.year_published
+                ? `(${gameData.year_published})`
+                : notAvailableString}
             </Typography>
             <Stack
               direction={'row'}
@@ -65,10 +63,10 @@ const BGCard = ({
               >
                 <Person />
                 <Typography>
-                  {minPlayers
-                    ? minPlayers === maxPlayers
-                      ? `${minPlayers}`
-                      : `${minPlayers} - ${maxPlayers}`
+                  {gameData.min_players
+                    ? gameData.min_players === gameData.max_players
+                      ? `${gameData.min_players}`
+                      : `${gameData.min_players} - ${gameData.max_players}`
                     : notAvailableString}
                 </Typography>
               </Box>
@@ -79,10 +77,10 @@ const BGCard = ({
               >
                 <AccessTime />
                 <Typography>
-                  {minPlaytime
-                    ? minPlaytime === maxPlaytime
-                      ? `${minPlaytime}`
-                      : `${minPlaytime} - ${maxPlaytime}`
+                  {gameData.min_playtime
+                    ? gameData.min_playtime === gameData.max_playtime
+                      ? `${gameData.min_playtime}`
+                      : `${gameData.min_playtime} - ${gameData.max_playtime}`
                     : notAvailableString}
                 </Typography>
               </Box>
@@ -93,7 +91,9 @@ const BGCard = ({
               >
                 <FamilyRestroom />
                 <Typography>
-                  {minAge ? `${minAge}+` : notAvailableString}
+                  {gameData.min_age
+                    ? `${gameData.min_age}+`
+                    : notAvailableString}
                 </Typography>
               </Box>
             </Stack>

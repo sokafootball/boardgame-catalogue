@@ -6,13 +6,15 @@ import {
   LinearProgress,
 } from '@mui/material';
 import BGCard from '../components/BGCard/BGCard';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ScreenSizeContext } from '../providers/ScreenSizeProvider';
 import { IScreenSizeType } from '../hooks/UseScreenType';
 import { useLazyGetGamesQuery } from '../api/boardgamesAtlas';
 import SearchBar from '../components/SearchBar/SearchBar';
 import { SearchBarFilters } from '../components/SearchBar/SearchBar.models';
 import { parseObjValuesFromNumbersToString } from '../utils';
+import { GameModel } from '../api/boardgamesAtlas/models/getGames';
+import { localStorageKey } from '../constants';
 const Home = () => {
   const defaultFilters: SearchBarFilters = {
     name: '',
@@ -28,6 +30,16 @@ const Home = () => {
   const screenSize: IScreenSizeType = useContext(
     ScreenSizeContext
   ) as IScreenSizeType;
+  const [savedSearchData, setSavedSearchData] = useState<GameModel>();
+
+  const getSearchDataFromLocalStorage = () => {
+    const savedData = localStorage.getItem(localStorageKey);
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      console.log(parsedData);
+      setSavedSearchData(parsedData);
+    }
+  };
 
   const handleFiltersChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -39,6 +51,17 @@ const Home = () => {
     }));
   };
 
+  useEffect(() => {
+    getSearchDataFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    if (data?.count > 0) {
+      localStorage.setItem(localStorageKey, JSON.stringify(data));
+      getSearchDataFromLocalStorage();
+    }
+  }, [data]);
+
   const handleConfirmSearch = () => {
     const formattedFilters = parseObjValuesFromNumbersToString(filters);
     setGetGames(formattedFilters);
@@ -47,10 +70,6 @@ const Home = () => {
   const handleClearFilters = () => {
     setFilters(defaultFilters);
   };
-
-  useEffect(() => {
-    console.log('filters:', filters);
-  }, [filters]);
 
   return (
     <>
@@ -64,7 +83,7 @@ const Home = () => {
       </Container>
       <Box mt={10}>
         <Container maxWidth="xl">
-          {isSuccess && data?.count === 0 && (
+          {isSuccess && savedSearchData?.count === 0 && (
             <Alert
               variant="filled"
               severity="info"
@@ -85,29 +104,18 @@ const Home = () => {
               There was an error, please try again later.
             </Alert>
           )}
-          {data?.games.length > 0 && (
+          {savedSearchData?.count > 0 && (
             <ImageList
               cols={screenSize.isMobile ? 1 : screenSize.isTablet ? 2 : 3}
-              sx={{ justifyItems: 'center', alignItems: 'center' }}
+              sx={{
+                justifyItems: 'center',
+                alignItems: 'center',
+                overflow: 'hidden',
+              }}
               gap={20}
             >
-              {data.games.map((item, index) => (
-                <BGCard
-                  key={`card_${index}`}
-                  name={item.name}
-                  minPlayers={item.min_players}
-                  maxPlayers={item.max_players}
-                  minPlaytime={item.min_playtime}
-                  maxPlaytime={item.max_playtime}
-                  minAge={item.min_age}
-                  year={item.year_published}
-                  description={item.description}
-                  thumbnailUrl={item.thumb_url}
-                  imageUrl={item.image_url}
-                  price={item.price}
-                  mechanicsIDs={item.mechanics}
-                  categoriesIDs={item.categories}
-                />
+              {savedSearchData?.games.map((item, index) => (
+                <BGCard key={`card_${index}`} gameData={item} />
               ))}
             </ImageList>
           )}
