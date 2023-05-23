@@ -33,7 +33,7 @@ const Home = () => {
   const [savedSearchData, setSavedSearchData] = useState<GameModel>();
 
   const getSearchDataFromLocalStorage = () => {
-    const savedData = localStorage.getItem(localStorageKey);
+    const savedData = sessionStorage.getItem(localStorageKey);
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       console.log(parsedData);
@@ -57,7 +57,7 @@ const Home = () => {
 
   useEffect(() => {
     if (data?.count > 0) {
-      localStorage.setItem(localStorageKey, JSON.stringify(data));
+      sessionStorage.setItem(localStorageKey, JSON.stringify(data));
       getSearchDataFromLocalStorage();
     }
   }, [data]);
