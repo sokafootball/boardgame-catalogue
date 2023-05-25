@@ -1,8 +1,13 @@
-import styles from './GameAttribute.module.scss';
 import { IGameAttributeProps } from './GameAttribute.models';
 import { Box, Typography } from '@mui/material';
+import { notAvailableString } from '../../../../../constants';
 
-const GameAttribute = ({ attributeName, children }: IGameAttributeProps) => {
+const GameAttribute = ({
+  attributeName,
+  attributeDescriptions,
+  nameStyle,
+  descriptionStyle,
+}: IGameAttributeProps) => {
   return (
     <Box
       display={'flex'}
@@ -11,8 +16,20 @@ const GameAttribute = ({ attributeName, children }: IGameAttributeProps) => {
       alignItems={'center'}
       gap={0.5}
     >
-      <Typography fontSize={20}>{attributeName}</Typography>
-      {children}
+      <Typography fontSize={20} style={{ ...nameStyle }} textAlign={'center'}>
+        {attributeName}
+      </Typography>
+      {attributeDescriptions.map((description, index) => (
+        <Typography
+          key={`attribute_${index}`}
+          fontWeight={600}
+          fontSize={20}
+          style={{ ...descriptionStyle }}
+          textAlign={'center'}
+        >
+          {description ? description : notAvailableString}
+        </Typography>
+      ))}
     </Box>
   );
 };

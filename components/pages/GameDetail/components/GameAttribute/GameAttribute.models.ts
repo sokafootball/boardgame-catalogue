@@ -1,5 +1,6 @@
 export interface IGameAttributeProps {
   attributeName: string;
-  children: React.ReactNode;
-  //   attributeDescriptions: string[];
+  attributeDescriptions: string[];
+  nameStyle?: object;
+  descriptionStyle?: object;
 }

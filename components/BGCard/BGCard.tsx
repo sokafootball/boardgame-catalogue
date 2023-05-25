@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { IBGCardProps } from './BGCard.models';
 import { useRouter } from 'next/router';
 import {

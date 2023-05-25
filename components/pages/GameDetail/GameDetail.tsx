@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
   notAvailableString,
   gameDataSessionStorageKey,
@@ -30,77 +31,55 @@ const GameDetail = () => {
     ScreenSizeContext
   ) as IScreenSizeType;
 
-  const gameCategoriesLabels = savedGameData?.categories.map((category) => {
-    const gameCategory = gameCategoriesDB.find((m) => m.id === category.id);
-    return (
-      <Typography
-        key={`category_${category.id}`}
-        fontWeight={600}
-        fontSize={20}
-        textAlign={'center'}
-      >
-        {gameCategory.name}
-      </Typography>
-    );
-  });
-  const gameMechanicsLabels = savedGameData?.mechanics.map((mechanic) => {
-    const gameMechanic = gameMechanicsDB.find((m) => m.id === mechanic.id);
-    return (
-      <Typography
-        key={`mechanic_${mechanic.id}`}
-        fontWeight={600}
-        fontSize={20}
-        textAlign={'center'}
-      >
-        {gameMechanic.name}
-      </Typography>
-    );
-  });
+  const gameCategoriesLabels = savedGameData?.categories.map(
+    (category) => gameCategoriesDB.find((m) => m.id === category.id).name
+  );
+  const gameMechanicsLabels = savedGameData?.mechanics.map(
+    (mechanic) => gameMechanicsDB.find((m) => m.id === mechanic.id).name
+  );
 
   return (
     <Container style={{ paddingTop: '20px', paddingBottom: '20px' }}>
       {savedGameData ? (
         <Box>
           <Stack spacing={3} alignItems={'center'}>
-            <Box>
-              <Typography
-                align="center"
-                noWrap
-                style={{ maxWidth: '90vw', fontWeight: 600, fontSize: 40 }}
-                textAlign={'center'}
-              >
-                {savedGameData.name}
-              </Typography>
-              <Typography
-                textAlign={'center'}
-                fontSize={screenSize.isMobile ? 20 : 30}
-              >
-                {savedGameData.year_published
-                  ? `(${savedGameData.year_published})`
-                  : notAvailableString}
-              </Typography>
-            </Box>
+            <GameAttribute
+              attributeName={savedGameData.name}
+              attributeDescriptions={[
+                savedGameData.year_published
+                  ? `(${savedGameData.year_published?.toString()})`
+                  : null,
+              ]}
+              nameStyle={{
+                maxWidth: '90vw',
+                fontWeight: 600,
+                fontSize: screenSize.isMobile ? 30 : 40,
+              }}
+              descriptionStyle={{
+                fontSize: screenSize.isMobile ? 20 : 30,
+                fontWeight: 400,
+              }}
+            />
             <img
               src={savedGameData.image_url}
               srcSet={savedGameData.image_url}
               alt={savedGameData.name}
               style={{
-                maxWidth: screenSize.isMobile ? 350 : 500,
+                maxWidth: screenSize.isMobile ? '100%' : 500,
                 maxHeight: screenSize.isMobile ? 250 : 500,
                 objectFit: 'contain',
               }}
             />
             <Stack spacing={1} justifyContent={'center'}>
-              <GameAttribute attributeName="Designer">
-                <Typography fontWeight={600} fontSize={20}>
-                  {savedGameData.primary_designer.name}
-                </Typography>
-              </GameAttribute>
-              <GameAttribute attributeName="Publisher">
-                <Typography fontWeight={600} fontSize={20}>
-                  {savedGameData.primary_publisher.name}
-                </Typography>
-              </GameAttribute>
+              <GameAttribute
+                attributeName="Designer"
+                attributeDescriptions={[savedGameData.primary_designer.name]}
+              />
+
+              <GameAttribute
+                attributeName="Publisher"
+                attributeDescriptions={[savedGameData.primary_publisher.name]}
+              />
             </Stack>
             {savedGameData.description_preview && (
               <>
@@ -116,31 +95,30 @@ const GameDetail = () => {
             )}
             <Divider style={{ width: '100%' }} />
             <Stack spacing={1.5} justifyContent={'center'}>
-              <GameAttribute attributeName="Players">
-                <Typography fontWeight={600} fontSize={20}>
-                  {savedGameData.min_players
-                    ? savedGameData.min_players === savedGameData.max_players
-                      ? `${savedGameData.min_players}`
-                      : `${savedGameData.min_players} - ${savedGameData.max_players}`
-                    : notAvailableString}
-                </Typography>
-              </GameAttribute>
-              <GameAttribute attributeName="Playtime">
-                <Typography fontWeight={600} fontSize={20}>
-                  {savedGameData.min_playtime
-                    ? savedGameData.min_playtime === savedGameData.max_playtime
-                      ? `${savedGameData.min_playtime} Min`
-                      : `${savedGameData.min_playtime} - ${savedGameData.max_playtime} Min`
-                    : notAvailableString}
-                </Typography>
-              </GameAttribute>
-              <GameAttribute attributeName="Age">
-                <Typography fontWeight={600} fontSize={20}>
-                  {savedGameData.min_age
+              <GameAttribute
+                attributeName="Players"
+                attributeDescriptions={[
+                  savedGameData.min_players === savedGameData.max_players
+                    ? `${savedGameData.min_players}`
+                    : `${savedGameData.min_players} - ${savedGameData.max_players}`,
+                ]}
+              />
+              <GameAttribute
+                attributeName="Playtime"
+                attributeDescriptions={[
+                  savedGameData.min_playtime === savedGameData.max_playtime
+                    ? `${savedGameData.min_playtime} Min`
+                    : `${savedGameData.min_playtime} - ${savedGameData.max_playtime} Min`,
+                ]}
+              />
+              <GameAttribute
+                attributeName="Age"
+                attributeDescriptions={[
+                  savedGameData.min_age
                     ? `${savedGameData.min_age}+`
-                    : notAvailableString}
-                </Typography>
-              </GameAttribute>
+                    : notAvailableString,
+                ]}
+              />
             </Stack>
             <Divider style={{ width: '100%' }} />
             <Stack
@@ -149,14 +127,16 @@ const GameDetail = () => {
               justifyContent={'center'}
             >
               {savedGameData.mechanics.length > 0 && (
-                <GameAttribute attributeName="Mechanics">
-                  {gameMechanicsLabels}
-                </GameAttribute>
+                <GameAttribute
+                  attributeName="Mechanics"
+                  attributeDescriptions={gameMechanicsLabels}
+                />
               )}
               {savedGameData.categories.length > 0 && (
-                <GameAttribute attributeName="Categories">
-                  {gameCategoriesLabels}
-                </GameAttribute>
+                <GameAttribute
+                  attributeName="Categories"
+                  attributeDescriptions={gameCategoriesLabels}
+                />
               )}
             </Stack>
           </Stack>
