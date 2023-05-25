@@ -3,4 +3,5 @@ export interface IGameAttributeProps {
   attributeDescriptions: string[];
   nameStyle?: object;
   descriptionStyle?: object;
+  separateWithColon?: boolean;
 }
