@@ -12,12 +12,16 @@ import { ScreenSizeContext } from '../../providers/ScreenSizeProvider';
 import { IScreenSizeType } from '../../hooks/UseScreenType';
 import { useContext } from 'react';
 import { FamilyRestroom, AccessTime, Person } from '@mui/icons-material';
+import { gameDataSessionStorageKey, notAvailableString } from '../../constants';
 const BGCard = ({ gameData }: IBGCardProps) => {
   const router = useRouter();
+  const handleCardClick = () => {
+    sessionStorage.setItem(gameDataSessionStorageKey, JSON.stringify(gameData));
+    router.push(`${gameData.id}`);
+  };
   const screenSize: IScreenSizeType = useContext(
     ScreenSizeContext
   ) as IScreenSizeType;
-  const notAvailableString = 'n/a';
   const iconLabelsGap = 0.5;
   return (
     <ImageListItem style={{ alignItems: 'center' }}>
@@ -30,22 +34,20 @@ const BGCard = ({ gameData }: IBGCardProps) => {
           height: '400px',
           objectFit: 'contain',
         }}
-        onClick={() => {
-          router.push(`${gameData.id}`);
-        }}
+        onClick={handleCardClick}
       />
       <ImageListItemBar
         subtitle={
           <Stack spacing={0.5}>
             <Typography
-              align="center"
+              textAlign={'center'}
               noWrap
               style={{ maxWidth: '90vw' }}
               sx={{ margin: 'auto' }}
             >
               {gameData.name}
             </Typography>
-            <Typography align="center">
+            <Typography textAlign={'center'}>
               {gameData.year_published
                 ? `(${gameData.year_published})`
                 : notAvailableString}

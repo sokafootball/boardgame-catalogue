@@ -14,7 +14,7 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import { SearchBarFilters } from '../components/SearchBar/SearchBar.models';
 import { parseObjValuesFromNumbersToString } from '../utils';
 import { GameModel } from '../api/boardgamesAtlas/models/getGames';
-import { localStorageKey } from '../constants';
+import { searchResultsSessionStorageKey } from '../constants';
 const Home = () => {
   const defaultFilters: SearchBarFilters = {
     name: '',
@@ -32,11 +32,10 @@ const Home = () => {
   ) as IScreenSizeType;
   const [savedSearchData, setSavedSearchData] = useState<GameModel>();
 
-  const getSearchDataFromLocalStorage = () => {
-    const savedData = sessionStorage.getItem(localStorageKey);
+  const getSearchDataFromSessionStorage = () => {
+    const savedData = sessionStorage.getItem(searchResultsSessionStorageKey);
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      console.log(parsedData);
       setSavedSearchData(parsedData);
     }
   };
@@ -52,13 +51,16 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getSearchDataFromLocalStorage();
+    getSearchDataFromSessionStorage();
   }, []);
 
   useEffect(() => {
     if (data?.count > 0) {
-      sessionStorage.setItem(localStorageKey, JSON.stringify(data));
-      getSearchDataFromLocalStorage();
+      sessionStorage.setItem(
+        searchResultsSessionStorageKey,
+        JSON.stringify(data)
+      );
+      getSearchDataFromSessionStorage();
     }
   }, [data]);
 
