@@ -3,12 +3,14 @@ export interface IScreenSizeType {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
+  isLargeDesktop: boolean;
 }
 const useScreenType = () => {
   const defaultScreenSize: IScreenSizeType = {
     isMobile: false,
     isTablet: false,
     isDesktop: false,
+    isLargeDesktop: false,
   };
   const [screenType, setScreenType] =
     useState<IScreenSizeType>(defaultScreenSize);
@@ -22,8 +24,10 @@ const useScreenType = () => {
           newScreenType.isMobile = true;
         } else if (width < 992) {
           newScreenType.isTablet = true;
-        } else {
+        } else if (width < 1441) {
           newScreenType.isDesktop = true;
+        } else {
+          newScreenType.isLargeDesktop = true;
         }
 
         setScreenType(newScreenType);

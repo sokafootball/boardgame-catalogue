@@ -108,7 +108,13 @@ const Home = () => {
           )}
           {savedSearchData?.count > 0 && (
             <ImageList
-              cols={screenSize.isMobile ? 1 : screenSize.isTablet ? 2 : 3}
+              cols={
+                screenSize.isMobile
+                  ? 1
+                  : screenSize.isTablet || screenSize.isDesktop
+                  ? 2
+                  : 3
+              }
               sx={{
                 justifyItems: 'center',
                 alignItems: 'center',
