@@ -1,4 +1,9 @@
 export interface GameParams {
+  gameData: GameDataParams;
+  clientId: string;
+}
+
+export interface GameDataParams {
   limit?: number;
   skip?: number;
   ids?: string[];

@@ -9,9 +9,9 @@ export const boardgamesAtlasApi = createApi({
   endpoints: (builder) => ({
     getGames: builder.query<GameModel, GameParams>({
       query: (args) =>
-        `search?&client_id=${
-          process.env.BOARDGAMEATLAS_CLIENT_ID
-        }&${objectToUrlParams(args)}&limit=${MAX_RESULTS}`,
+        `search?&client_id=${args.clientId}&${objectToUrlParams(
+          args.gameData
+        )}&limit=${MAX_RESULTS}`,
     }),
   }),
 });

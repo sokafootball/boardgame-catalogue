@@ -15,7 +15,8 @@ import { SearchBarFilters } from '../components/SearchBar/SearchBar.models';
 import { parseObjValuesFromNumbersToString } from '../utils';
 import { GameModel } from '../api/boardgamesAtlas/models/getGames';
 import { searchResultsSessionStorageKey } from '../constants';
-const Home = () => {
+
+const Home = ({ BOARDGAMEATLAS_CLIENT_ID }) => {
   const defaultFilters: SearchBarFilters = {
     name: '',
     gt_min_age: '',
@@ -66,7 +67,10 @@ const Home = () => {
 
   const handleConfirmSearch = () => {
     const formattedFilters = parseObjValuesFromNumbersToString(filters);
-    setGetGames(formattedFilters);
+    setGetGames({
+      gameData: formattedFilters,
+      clientId: BOARDGAMEATLAS_CLIENT_ID,
+    });
   };
 
   const handleClearFilters = () => {
@@ -134,3 +138,11 @@ const Home = () => {
 };
 
 export default Home;
+
+export const getServerSideProps = async () => {
+  return {
+    props: {
+      BOARDGAMEATLAS_CLIENT_ID: process.env.BOARDGAMEATLAS_CLIENT_ID,
+    },
+  };
+};
