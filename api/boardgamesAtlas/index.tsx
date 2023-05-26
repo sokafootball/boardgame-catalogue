@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { GameModel, GameParams } from './models/getGames';
 import { objectToUrlParams } from '../../utils';
-import { MAX_RESULTS, boardGamesAtlasClientId } from '../../constants';
+import { MAX_RESULTS } from '../../constants';
 
 export const boardgamesAtlasApi = createApi({
   reducerPath: 'boardgamesAtlasApi',
@@ -9,9 +9,9 @@ export const boardgamesAtlasApi = createApi({
   endpoints: (builder) => ({
     getGames: builder.query<GameModel, GameParams>({
       query: (args) =>
-        `search?&client_id=${boardGamesAtlasClientId}&${objectToUrlParams(
-          args
-        )}&limit=${MAX_RESULTS}`,
+        `search?&client_id=${
+          process.env.boardGamesAtlasClientId
+        }&${objectToUrlParams(args)}&limit=${MAX_RESULTS}`,
     }),
   }),
 });
