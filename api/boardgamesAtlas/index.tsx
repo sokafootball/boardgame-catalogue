@@ -10,7 +10,7 @@ export const boardgamesAtlasApi = createApi({
     getGames: builder.query<GameModel, GameParams>({
       query: (args) =>
         `search?&client_id=${
-          process.env.boardGamesAtlasClientId
+          process.env.BOARDGAMEATLAS_CLIENT_ID
         }&${objectToUrlParams(args)}&limit=${MAX_RESULTS}`,
     }),
   }),
