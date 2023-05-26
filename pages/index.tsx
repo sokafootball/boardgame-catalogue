@@ -16,7 +16,7 @@ import { parseObjValuesFromNumbersToString } from '../utils';
 import { GameModel } from '../api/boardgamesAtlas/models/getGames';
 import { searchResultsSessionStorageKey } from '../constants';
 
-const Home = ({ BOARDGAMEATLAS_CLIENT_ID }) => {
+const Home = ({ BOARDGAMEATLAS_CLIENT_ID = '6dvVSLJOhu' }) => {
   const defaultFilters: SearchBarFilters = {
     name: '',
     gt_min_age: '',
@@ -139,10 +139,10 @@ const Home = ({ BOARDGAMEATLAS_CLIENT_ID }) => {
 
 export default Home;
 
-export const getServerSideProps = async () => {
-  return {
-    props: {
-      BOARDGAMEATLAS_CLIENT_ID: process.env.BOARDGAMEATLAS_CLIENT_ID,
-    },
-  };
-};
+// export const getServerSideProps = async () => {
+//   return {
+//     props: {
+//       BOARDGAMEATLAS_CLIENT_ID: process.env.BOARDGAMEATLAS_CLIENT_ID,
+//     },
+//   };
+// };
