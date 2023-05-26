@@ -6,6 +6,10 @@ import { store } from '../store';
 import { Provider } from 'react-redux';
 
 const MyApp = ({ Component, pageProps }) => {
+  console.log(
+    'BOARDGAMEATLAS_CLIENT_ID: ',
+    process.env.BOARDGAMEATLAS_CLIENT_ID
+  );
   return (
     <>
       <Provider store={store}>
