@@ -12,3 +12,4 @@
 - look for other images if not available
 - add pointer cursors to card
 - try using getServerSideProps to fetch data
+- test
