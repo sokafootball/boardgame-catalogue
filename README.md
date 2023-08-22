@@ -6,4 +6,4 @@ This is a small React.js project i made in order to learn and experiment with a 
 - Material UI
 - RTK Query
 
-For this is reason the code is more than complex than it should be.
+For this is reason the code is more complex than it should be.
